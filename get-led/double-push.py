@@ -40,6 +40,6 @@ while True:
         time.sleep(sleep_time)
     value = num
     for i in range(8):
-        GPIO.output()(leds[i], value%2)
+        GPIO.output(leds[i], value%2)
         value = value//2
 
