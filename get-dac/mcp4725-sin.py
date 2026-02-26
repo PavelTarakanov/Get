@@ -11,7 +11,7 @@ dac = mcp4725_driver.MCP4725(4.2)
 try:
     while(True):
         t = time.time_ns()/1000000000
-        dac.setvoltage(dac.vmax/2 + amplitude * math.sin(2*math.pi*freq*t))
+        dac.set_voltage(dac.dynamic_range/2 + amplitude * math.sin(2*math.pi*freq*t))
         time.sleep(1/sampling_freq)
 
 finally:

@@ -15,23 +15,28 @@ def voltage_to_number(voltage):
         return 0
     return int(voltage / dynamic_range * 255)
 
-class RWM_DAC:
+class PWM_DAC:
     def __init__(self, gpio_pin, pwm_frequensy, dynamic_range, verbose = False):
         self.gpio_pin = gpio_pin
         self.pwm_frequensy = pwm_frequensy
         self.dynamic_range = dynamic_range
         self.verbose = verbose
+
+        self.pwm = GPIO.PWM(gpio_pin, 1000)
+
+        self.pwm.start(0.0)
     def deinit(self):
         GPIO.cleanup()
     def set_voltage(self, voltage):
-        p = GPIO.PWM(self.gpio_pin, self.pwm_frequensy)
-        p.start(voltage/self.dynamic_range*100)
-        input("Нажмите Enter чтобы прекратить")
-        p.stop()
-        
+        if (not (0 <= voltage <= self.dynamic_range)):
+            print(f"Напряжение выходит за динамический диапазон ЦАП(0.00 - {self.dynamic_range:.2f} В)")
+            return 0
+        self.pwm.ChangeDutyCycle(voltage/self.dynamic_range*100)
+
+
 if __name__ == "__main__":
     try:
-        dac = RWM_DAC(12, 500, 3.290, True)
+        dac = PWM_DAC(12, 500, 3.290, True)
 
         while True:
             try:
