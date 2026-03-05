@@ -36,6 +36,25 @@ class R2R_ADC:
 
         print(f"Напряжение: {(number/256)*self.dynamic_range:.3f}В")
         return (number/256)*self.dynamic_range
+    def succesive_approximation_adc(self):
+        number = 0
+
+        for i in range(7, 0, -1):
+            number += 2**i
+            self.number_to_dac(number)
+
+            time.sleep(self.compare_time)
+
+            if GPIO.input(self.comp_gpio) == GPIO.HIGH:
+                number -= 2**i
+        
+        return number
+    def get_sar_voltage(self):
+        number = self.succesive_approximation_adc()
+
+        print(f"Напряжение: {(number/256)*self.dynamic_range:.3f}В")
+        return (number/256)*self.dynamic_range
+
 
 if __name__ == "__main__":
     adc = R2R_ADC(3.3)
@@ -50,7 +69,7 @@ if __name__ == "__main__":
         while(time.time() - start_time < duration):
             current_time = time.time() - start_time
 
-            voltage = adc.get_sc_voltage()
+            voltage = adc.get_sar_voltage()
             voltage_values.append(voltage)
 
             time_values.append(current_time)
