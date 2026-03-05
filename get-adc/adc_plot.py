@@ -9,7 +9,7 @@ def plot_voltage_vs_time(time, voltage, max_voltage):
     plt.ylabel("Напряжение, В", fontsize = 12)
 
     plt.xlim(0, max(time) + 1)
-    plt.ylim(0, max_voltage)
+    plt.ylim(0, max(voltage))
 
     plt.grid(True, alpha = 0.3, linestyle = "--")
 
