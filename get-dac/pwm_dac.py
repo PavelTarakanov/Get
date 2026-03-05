@@ -22,6 +22,10 @@ class PWM_DAC:
         self.dynamic_range = dynamic_range
         self.verbose = verbose
 
+        GPIO.setmode(GPIO.BCM)
+
+        GPIO.setup(12, GPIO.OUT)  
+        
         self.pwm = GPIO.PWM(gpio_pin, 1000)
 
         self.pwm.start(0.0)
